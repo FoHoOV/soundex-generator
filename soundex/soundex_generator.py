@@ -54,7 +54,7 @@ def map_characters_to_digits(soundexes: list[Soundex]):
     update_soundex_list_with_regex(soundexes, r"[DT]", lambda regex, value: regex.sub("3", value))
     update_soundex_list_with_regex(soundexes, r"L", lambda regex, value: regex.sub("4", value))
     update_soundex_list_with_regex(soundexes, r"[MN]", lambda regex, value: regex.sub("5", value))
-    update_soundex_list_with_regex(soundexes, r"R", lambda regex, value: regex.sub("7", value))
+    update_soundex_list_with_regex(soundexes, r"R", lambda regex, value: regex.sub("6", value))
 
 
 # for exp: H118829 turn into H1829
