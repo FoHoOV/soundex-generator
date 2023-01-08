@@ -26,7 +26,7 @@ class Soundex:
 
 def update_soundex_list(soundexes: list[Soundex], update_func: Callable[[str], str]):
     for i in range(len(soundexes)):
-        soundexes[i] = soundexes[i].update(soundexes[i][0].upper() + update_func(soundexes[i][1:]))
+        soundexes[i].update(soundexes[i][0].upper() + update_func(soundexes[i][1:]))
 
 
 # replace any of ['A', E', 'I', 'O', 'U', 'H', 'W', 'Y'] with 0
@@ -43,16 +43,16 @@ def change_vowels_to_0(soundexes: list[Soundex]):
 # M, N → 5
 # R → 6
 def change_letters_to_digits(soundexes: list[Soundex]):
-    def substitute_characters(soundexes: list[Soundex], characters: str, number: int):
+    def substitute_characters(characters: str, number: int):
         regex = re.compile(f"[{characters}]", re.IGNORECASE)
         update_soundex_list(soundexes, lambda value: regex.sub(str(number), value))
 
-    substitute_characters(soundexes, "BFPV", 1)
-    substitute_characters(soundexes, "CGJKQSXZ", 2)
-    substitute_characters(soundexes, "DT", 3)
-    substitute_characters(soundexes, "L", 4)
-    substitute_characters(soundexes, "MN", 5)
-    substitute_characters(soundexes, "R", 6)
+    substitute_characters("BFPV", 1)
+    substitute_characters("CGJKQSXZ", 2)
+    substitute_characters("DT", 3)
+    substitute_characters("L", 4)
+    substitute_characters("MN", 5)
+    substitute_characters("R", 6)
 
 
 def remove_consecutive_digits(soundexes: list[Soundex]):
