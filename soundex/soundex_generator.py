@@ -29,10 +29,14 @@ def update_soundex_list(soundexes: list[Soundex], update_func: Callable[[str], s
         soundexes[i].update(soundexes[i][0].upper() + update_func(soundexes[i][1:]))
 
 
+def update_soundex_list_with_regex(soundexes: list[Soundex], pattern: str, update_func: Callable[[re.Pattern, str], str]):
+    regex = re.compile(pattern, re.IGNORECASE)
+    update_soundex_list(soundexes, lambda value: update_func(regex, value))
+
+
 # replace any of ['A', E', 'I', 'O', 'U', 'H', 'W', 'Y'] with 0
 def change_vowels_to_0(soundexes: list[Soundex]):
-    vowel_replaces_regex = re.compile(r"""[AEIOUHWY]""", re.IGNORECASE)
-    update_soundex_list(soundexes, lambda value: vowel_replaces_regex.sub("0", value))
+    update_soundex_list_with_regex(soundexes, r"""[AEIOUHWY]""", lambda regex, value: regex.sub("0", value))
 
 
 # performs this operation
@@ -43,26 +47,20 @@ def change_vowels_to_0(soundexes: list[Soundex]):
 # M, N → 5
 # R → 6
 def change_letters_to_digits(soundexes: list[Soundex]):
-    def substitute_characters(characters: str, number: int):
-        regex = re.compile(f"[{characters}]", re.IGNORECASE)
-        update_soundex_list(soundexes, lambda value: regex.sub(str(number), value))
-
-    substitute_characters("BFPV", 1)
-    substitute_characters("CGJKQSXZ", 2)
-    substitute_characters("DT", 3)
-    substitute_characters("L", 4)
-    substitute_characters("MN", 5)
-    substitute_characters("R", 6)
+    update_soundex_list_with_regex(soundexes, r"[BFPV]", lambda regex, value: regex.sub("1", value))
+    update_soundex_list_with_regex(soundexes, r"[CGJKQSXZ]", lambda regex, value: regex.sub("2", value))
+    update_soundex_list_with_regex(soundexes, r"[DT]", lambda regex, value: regex.sub("3", value))
+    update_soundex_list_with_regex(soundexes, r"L", lambda regex, value: regex.sub("4", value))
+    update_soundex_list_with_regex(soundexes, r"[MN]", lambda regex, value: regex.sub("5", value))
+    update_soundex_list_with_regex(soundexes, r"R", lambda regex, value: regex.sub("7", value))
 
 
 def remove_consecutive_digits(soundexes: list[Soundex]):
-    regex = re.compile(r"""(\d)\1+""", re.IGNORECASE)
-    update_soundex_list(soundexes, lambda value: regex.sub(r"\1", value))
+    update_soundex_list_with_regex(soundexes, r"""(\d)\1+""", lambda regex, value: regex.sub(r"\1", value))
 
 
 def remove_all_zeros(soundexes: list[Soundex]):
-    regex = re.compile(r"""0""", re.IGNORECASE)
-    update_soundex_list(soundexes, lambda value: regex.sub(r"", value))
+    update_soundex_list_with_regex(soundexes, r"""0""", lambda regex, value: regex.sub(r"", value))
 
 
 def check_soundexes_lengths(soundexes: list[Soundex]):
