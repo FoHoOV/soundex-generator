@@ -24,11 +24,13 @@ class Soundex:
         return self
 
 
+# this function will modify the list
 def update_soundex_list(soundexes: list[Soundex], update_func: Callable[[str], str]):
     for i in range(len(soundexes)):
         soundexes[i].update(soundexes[i][0].upper() + update_func(soundexes[i][1:]))
 
 
+# this function will modify the list
 def update_soundex_list_with_regex(soundexes: list[Soundex], pattern: str, update_func: Callable[[re.Pattern, str], str]):
     regex = re.compile(pattern, re.IGNORECASE)
     update_soundex_list(soundexes, lambda value: update_func(regex, value))
@@ -55,7 +57,9 @@ def change_letters_to_digits(soundexes: list[Soundex]):
     update_soundex_list_with_regex(soundexes, r"R", lambda regex, value: regex.sub("7", value))
 
 
-def remove_consecutive_digits(soundexes: list[Soundex]):
+# for exp: H118829 turn into H1829
+# for exp: H918277099999 turns into H9182709
+def replace_duplicates_with_one_occurrence(soundexes: list[Soundex]):
     update_soundex_list_with_regex(soundexes, r"""(\d)\1+""", lambda regex, value: regex.sub(r"\1", value))
 
 
@@ -71,7 +75,7 @@ def generate_soundexes(tokens: [str]) -> list[Soundex]:
     soundexes = [Soundex(token) for token in tokens]
     change_vowels_to_0(soundexes)
     change_letters_to_digits(soundexes)
-    remove_consecutive_digits(soundexes)
+    replace_duplicates_with_one_occurrence(soundexes)
     remove_all_zeros(soundexes)
     check_soundexes_lengths(soundexes)
     return soundexes
