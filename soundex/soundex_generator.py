@@ -71,8 +71,8 @@ def check_soundexes_lengths(soundexes: list[Soundex]):
     update_soundex_list(soundexes, lambda value: value + "0" * (3 - len(value)) if len(value) < 3 else value[0:3])
 
 
-def generate_soundexes(tokens: [str]) -> list[Soundex]:
-    soundexes = [Soundex(token) for token in tokens]
+def generate_soundexes(tokens: set[str]) -> list[Soundex]:
+    soundexes = [Soundex(token) for token in tokens if not token.isnumeric()]
     change_vowels_to_0(soundexes)
     change_letters_to_digits(soundexes)
     replace_duplicates_with_one_occurrence(soundexes)
