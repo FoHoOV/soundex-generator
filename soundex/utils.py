@@ -1,13 +1,9 @@
 from collections import defaultdict
 
-import soundex
+from soundex import soundex_generator
 
 
-class Result:
-    pass
-
-
-def find_same_soundex_values(soundexes: [soundex.Soundex]) -> [Result]:
+def find_same_soundex_values(soundexes: [soundex_generator.Soundex]) -> [soundex_generator.Soundex]:
     result = defaultdict(list)
     for soundex in soundexes:
         result[soundex.soundex].append(soundex.word)
