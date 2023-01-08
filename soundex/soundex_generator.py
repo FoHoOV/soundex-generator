@@ -17,7 +17,7 @@ class Soundex:
         return self.soundex[index]
 
     def __repr__(self):
-        return f"Soundex({self.word=}, {self.soundex}"
+        return f"Soundex(word={self.word}, soundex={self.soundex}"
 
     def update(self, new_soundex: str) -> Soundex:
         self.soundex = new_soundex
