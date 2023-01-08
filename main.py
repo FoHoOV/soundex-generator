@@ -8,7 +8,7 @@ def main(show_same_soundexes_only: bool):
     # but the soundex generator filters the tokens by calling token.isalpha()
     raw_text = html_parser.get_text_from_url(html_parser.TEST_URL)
     tokens = tokenizer.extract_tokens(raw_text)
-    soundexes = soundex_generator.generate_soundexes(tokens)
+    soundexes = soundex_generator.generate_soundexes(tokens, 10)
     if show_same_soundexes_only:
         pprint(utils.find_same_soundex_values(soundexes))
     else:

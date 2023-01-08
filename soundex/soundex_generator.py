@@ -67,15 +67,17 @@ def remove_all_zeros(soundexes: list[Soundex]):
     update_soundex_list_with_regex(soundexes, r"""0""", lambda regex, value: regex.sub(r"", value))
 
 
-def check_soundexes_lengths(soundexes: list[Soundex]):
-    update_soundex_list(soundexes, lambda value: value + "0" * (3 - len(value)) if len(value) < 3 else value[0:3])
+def check_soundexes_lengths(soundexes: list[Soundex], max_length: int):
+    update_soundex_list(soundexes,
+                        lambda value: value + "0" * (max_length - 1 - len(value))
+                        if len(value) < max_length - 1 else value[0:max_length - 1])
 
 
-def generate_soundexes(tokens: set[str]) -> list[Soundex]:
+def generate_soundexes(tokens: set[str], max_length: int = 4) -> list[Soundex]:
     soundexes = [Soundex(token) for token in tokens if token.isalpha()]
     change_vowels_to_0(soundexes)
     map_characters_to_digits(soundexes)
     replace_duplicates_with_one_occurrence(soundexes)
     remove_all_zeros(soundexes)
-    check_soundexes_lengths(soundexes)
+    check_soundexes_lengths(soundexes, max_length)
     return soundexes
