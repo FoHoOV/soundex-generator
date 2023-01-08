@@ -72,7 +72,7 @@ def check_soundexes_lengths(soundexes: list[Soundex]):
 
 
 def generate_soundexes(tokens: set[str]) -> list[Soundex]:
-    soundexes = [Soundex(token) for token in tokens if not token.isnumeric()]
+    soundexes = [Soundex(token) for token in tokens if token.isalpha()]
     change_vowels_to_0(soundexes)
     change_letters_to_digits(soundexes)
     replace_duplicates_with_one_occurrence(soundexes)
