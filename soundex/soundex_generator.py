@@ -48,7 +48,7 @@ def change_vowels_to_0(soundexes: list[Soundex]):
 # L → 4
 # M, N → 5
 # R → 6
-def change_letters_to_digits(soundexes: list[Soundex]):
+def map_characters_to_digits(soundexes: list[Soundex]):
     update_soundex_list_with_regex(soundexes, r"[BFPV]", lambda regex, value: regex.sub("1", value))
     update_soundex_list_with_regex(soundexes, r"[CGJKQSXZ]", lambda regex, value: regex.sub("2", value))
     update_soundex_list_with_regex(soundexes, r"[DT]", lambda regex, value: regex.sub("3", value))
@@ -74,7 +74,7 @@ def check_soundexes_lengths(soundexes: list[Soundex]):
 def generate_soundexes(tokens: set[str]) -> list[Soundex]:
     soundexes = [Soundex(token) for token in tokens if token.isalpha()]
     change_vowels_to_0(soundexes)
-    change_letters_to_digits(soundexes)
+    map_characters_to_digits(soundexes)
     replace_duplicates_with_one_occurrence(soundexes)
     remove_all_zeros(soundexes)
     check_soundexes_lengths(soundexes)
